@@ -1,0 +1,17 @@
+Package: Lab4
+Type: Package
+Title: Linear Regression
+Version: 1.0
+Date: 2018-11-07
+Author: Pedram , Mariano and Roshni
+Maintainer: <pedka102@student.liu.se>
+Description: This package is created to handle linear regression models.
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+Suggests: testthat,
+    knitr,
+    rmarkdown,
+    ggplot2,
+    ggThemeAssist
+RoxygenNote: 6.1.0

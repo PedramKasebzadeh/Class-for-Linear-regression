@@ -57,6 +57,7 @@ linreg <- setRefClass(Class = "linreg",
                           dep_y <- all.vars(formula)[1]
                           y <- as.matrix(data[dep_y]) 
                           parse <<- deparse(substitute(data))
+                          parse2 <<- as.character(substitute(data))
                           #Regressions coefficients
                           regco <<- solve((t(X)%*%X))%*%t(X)%*%y
                           #X <- QR
@@ -84,12 +85,10 @@ linreg <- setRefClass(Class = "linreg",
                         
                         #print coefficients and coefficient names
                         print = function(){
-                          cat("\n","Call:","\n",
-                              paste0("linreg(formula = ", format(formula), ", data = ", parse , ")\n\n ", sep = ""))
-                          cat("\n","Coefficients:","\n")
-                          (setNames(round(regco[1:nrow(regco)],2),rownames(regco)))
-                          
+                          cat(paste0("linreg(formula = ", format(formula), ", data = ", parse , ")\n\n ", sep = ""),
+                          rownames(regco),round(regco[1:nrow(regco)],2))
                         },
+                        
                         
                         #plot()
                         
@@ -173,10 +172,21 @@ linreg <- setRefClass(Class = "linreg",
                         
                         #summary()
                         summary = function(){
+                          cat("Call:\n")
+                          cat("linreg(formula", format(formula), ", data =",parse2,") :\n\n ", sep="")
+                          cat("\nCoefficients:\n")
+                          std <- sqrt(diag(Var_Beta))
+                          summary.data <- cbind(regco,std,t_Beta,pvalue)
+                          cols <- colnames(summary.data)[1:3]
+                          summary.data[,cols] = round(summary.data[,cols],4)
+                          estim <- "***"
+                          summary.data <- cbind(summary.data,estim)
+                          print.data.frame(as.data.frame(summary.data))
+                          cat("\nResidual standard error: ")
+                          sd.res <- sqrt(Sigma_square)
+
                           
-                          cat("linreg(formula = ", format(formula), ", data = ", parse, ") :\n\n ", sep = "")
-                          x <- setNames(as.data.frame(cbind(regco,as.matrix(sqrt(diag(Var_Beta))),t_Beta, formatC(pvalue, format = "e", digits = 2), p_cal(pvalue))), c("Coefficients","Standard error","t-values", "p-values", ""))
-                          print_custom(x)
+                         #print_custom(x)
                           cat("\n\n Residual standard error: ", sqrt(Sigma_square), " on ", dfreedom, " degrees of freedom ", sep = "")
                         }
                         

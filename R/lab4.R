@@ -24,7 +24,6 @@
 #' @field variance for variance values 
 #' @return nothing
 #'
-#' @import methods
 #' 
 #' 
 #' @exportClass linreg
@@ -57,7 +56,6 @@ linreg <- setRefClass(Class = "linreg",
                           dep_y <- all.vars(formula)[1]
                           y <- as.matrix(data[dep_y]) 
                           parse <<- deparse(substitute(data))
-                          parse2 <<- as.character(substitute(data))
                           #Regressions coefficients
                           regco <<- solve((t(X)%*%X))%*%t(X)%*%y
                           #X <- QR
@@ -172,6 +170,8 @@ linreg <- setRefClass(Class = "linreg",
                         
                         #summary()
                         summary = function(){
+                          parse2<- as.character(substitute(data))
+                          
                           cat("Call:\n")
                           cat("linreg(formula", format(formula), ", data =",parse2,") :\n\n ", sep="")
                           cat("\nCoefficients:\n")
